@@ -1,0 +1,142 @@
+/* ===== MEMORY MATCH (6x4) - MINIMAL STORYLINE VERSION ===== */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /*background: #002E3D;*/
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  user-select: none;
+  background-image: url('images/lvl1Bg.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#game-container {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  /*background-image: url('images/bggm.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;*/
+}
+
+/* Dark overlay for contrast */
+#game-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1;
+}
+
+/* GRID */
+#memory-grid {
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+
+  width: 40%;
+  height: 50%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  grid-gap: 12px;
+  justify-items: center;
+  align-items: center;
+}
+
+/* CARD STYLE */
+.memory-card {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  cursor: pointer;
+  perspective: 1000px;
+  transition: transform 0.15s ease;
+}
+
+.memory-card:hover {
+  transform: scale(1.05);
+}
+
+.memory-card.matched {
+  pointer-events: none;
+  filter: brightness(1.2);
+}
+
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  border-radius: 10px;
+}
+
+.memory-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* FRONT & BACK */
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  border: 2px solid #ff9900;
+  object-fit: cover;
+}
+
+/* Back of card */
+.card-front {
+  background: linear-gradient(145deg, #2a2a2a, #404040);
+}
+
+/* Face image */
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* MATCH ANIMATION */
+.memory-card.matched .card-inner {
+  animation: matchGlow 0.8s ease-in-out;
+  border-color: #00ff00;
+}
+
+@keyframes matchGlow {
+  0%   { transform: rotateY(180deg) scale(1); }
+  50%  { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 20px rgba(0,255,0,0.6); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* ERROR SHAKE */
+.card-error {
+  animation: cardError 0.4s ease-in-out;
+}
+
+@keyframes cardError {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Maintain 16:9 inside Storyline responsive mode */
+@media (max-width: 960px) {
+  #game-container {
+    width: 100vw;
+    height: 56.25vw;
+  }
+}
